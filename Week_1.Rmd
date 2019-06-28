@@ -1,0 +1,150 @@
+---
+title: "Week_1"
+author: "Brennan"
+date: "6/25/2019"
+output: html_document
+---
+#Week 1 Notes: Swirl Tutorial
+###Process of Opening swirl
+- install.packages("swirl")
+  - I also had to _install.packages("rlang")_ in order to get mine to work
+- library("swirl")
+- swirl()
+- Choose R Programming Course
+
+###1:Basic Building Blocks 
+- R can be used as an interactive calculator 
+```{r}
+2 + 3
+```
+- how to assign a variable: x<- 5+7
+- to view the contents of your variable, just type x and hit enter
+- vector: small collection of numbers
+- data structure: any object that contains data 
+- way to create a vector is the c() function: z<- c(1.1, 9, 3.14)
+-?function will yield the help files fore the fucntion
+- Can combine vectors: c(z, 555, z)
+- Vectors can be used in Numerical expressions
+- common arithmetic operators: +, -, /, *, and ^
+- sqrt():square root
+- abs(): absolute value
+-if vectors are of different lengths, R recyles the shorter vector until it is the same length as the longer one
+- can use the up arrow to cycle through previous commands
+- the tab key can help you find your variables
+
+###3: Sequences of Numbers
+- simplest way to create a sequence of numbers is using ":"
+  - 1:20
+- 15:1 would yield 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1
+- another way to create a sequence: seq(1,20)
+- seq(1, 20, by=0.5): a vector of numbers ranging from 1-20, incremented by 0.5
+- seq(4,20, length=30): sequence of 30 numbers in between 4 and 20
+- rep(): replicate
+  - uses: creating a vector that contains 40 zeroes (rep(0, times=40))
+
+###4: Vectors
+- atomic vectors: contain 1 data type
+- lists: may contain multiple data types
+- Types of atomic vectors
+  - numerical, logical, character, integer, and complex
+- logical vectors tell us whether or not corresponding elements of other vectors/data satisfy the condition
+- for example: if the condition was vector>1, for each value in that numerical vector, the logical vector would have a corresponding True or False based on whether or not the value was greater than 1
+- >=: greater than or equal
+-==: equality
+- !=: inequality 
+- A | B: At least A or B is true
+- A & B: A and be are both true
+- !A: negation/opposite of A (If A is True, !A is False)
+- Character vector is vector that contains words: my_char<- c("My", "Name", "Is")
+- paste(my_char, collapse= " ") yields MY Name Is
+- Can add vectors together by using c() again: my_name<- c(my_char, "Brennan")
+- Paste can be used to join two vectors:
+  -paste(1:3, c("X", "Y", "Z"), sep = "")
+    - "1X" "2Y" "3Z"
+
+###5: Missing Values
+- NA: represents values that are missing or not available
+- any operation involving NA generally yields NA as the result
+  - NA + 3
+- how to combine 2 vectors and select a certain number of elements from the combined values
+  -sample(c(y,z),100)
+- is.na() function: tells us whether or not each element of a vector is NA
+  -my_na<- is.na(data)
+- R represents TRUE as the number 1 and FALSE as the number 0. The sum of  TRUEs and FALSEs yield total number of TRUEs.
+  - sum(my_na)
+-Nan: Not a number
+  - 0/0= Nan
+  -Inf(infinity)-inf= Nan
+
+###6: Subsetting Vectors
+- if you have a vector x, x[1:10] allows you to view the first 10 elements of x
+- x[is.na(x)]: yields all the NAs of the vector x
+- x[!is.na(x)]: all the values that aren't NA of the vector x
+- y[y>0]: yields all the positive elements of y
+- y[y<0]: yields all the negative elements of y
+- x[!is.na(x) & x>0]: removes the NA and negative values from vector x
+- x[c(3,5,7)]: yields the 3rd, 5th, and 7th value of the vector
+- ways to get all the elements of x except for 2nd and 10th
+  - x[c( -2, -10)]
+  - x[-c(-2,-10)]
+- Creating a numeric vector with named elements
+  - vect<- c(A=1,B=2, C=3)
+-names() function yields the names of the vector
+  - names(vect): "A", "B", "C"
+- identical() function can be used to see if two vectors/statements/whatever are identical/equal
+- Subsetting a vector by named elements: vect["A"]
+
+###7: Matrices and Data Frames
+- matrices and data frames are rectangular data types meaning they store their data in tables with rows and columns
+- matrices contain a single class of data while data frames consist of many different classes of data
+-dim() function tells us the dimensions of an object
+- you can give a vector a "dim" attribute
+  - dim(my_vector)<- c(4,5)
+-another way of checking the dimensions is through the attributes() function
+- In giving it a dim attribute you have converted your vector into a matrix with 4 rows and 5 columns
+- How to make a matrix: my_matrix2<- matrix(1:20, nrow=4, ncol=5)
+- How to name the rows of the matrix: my_data<- data.frame(patients,my_matrix)
+  - where patients is a vector containing the names of the rows
+- How to name the columns of the matrix: colnames(my_data)<- cnames
+  - where cnames is a vector containing the names of the rows
+
+###8: Logic
+- There are two logical/boolean values: TRUE and FALSE
+- >=: greater than or equal
+- >: greater than
+- ==: equality
+- !=: inequality 
+- examples
+  - -6>-7 yields TRUE
+- !A: negation/opposite of A (If A is True, !A is False)
+  - !5==7 is TRUE
+- & operator: if both the left and right operands are true then the entire expression is true
+  - evaluates AND across a vector
+- && operator: evaluates AND on the first member of a vector only
+- | operator: the OR operator, if at least one of the operands is true the entire expression is true, evaluates across the vector
+- || operator: Evaluates OR on the first member of a vector only
+- Logical expressions have an order of operations as well: all AND operators are evaluated before OR operators
+- the function isTRUE() will evaluate an argument as true or not
+-xor(): exclusive or; if there are two arguments and 1 is true and the other is false, the function evaluates it as true, otherwise false
+- the which() funtion takes a logical vector as an argument and returns the indices of the vector that are true 
+- any(): will return TRUE if one or more of the elements in the logical vector is TRUE
+- all(): function will return true is every element in the logical vector is true
+
+###12. Looking at Data
+- class(): will give you an idea of the overall structure of the data
+- dim(): allow us to see how many rows and columns there are
+  - the first number is the number of rows, while the second is the number of columns
+-nrow(): will also yield number of rows
+- ncol(): will also yield number of columns
+- object.size(plants): tells how much space the dataset is occupying in memory
+- names(): will return a character vector of the column names
+- head(): allows you to preview the top of the dataset
+  -head(data, 10): allows you to preview the first ten rows of data set
+- tail(): allows you to preview the bottom of the data set
+  -tail(data, 15): allows you to preview the bottom of the data set
+- summary(): helps us understand how data is distributed and how much of the dataset is missing
+  - provides the minimum, 1st quartile, median, mean, 3rd quartile, maximum as well as the  # of NA
+- for categorical/factor variables, we can see how many times each value occurs in the data with:
+  table(data$categorical_variable)
+- str(): provides a concise summary of the data, the rows and columns, the names and class of each variable and a preview of its contents
+
