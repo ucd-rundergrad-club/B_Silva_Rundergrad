@@ -61,8 +61,10 @@ library("tidyverse")
 ```
 
 ###Chapter 3: Data visualization
+
 ####3.1: Introduction
 - ggplot2:implements the grammar of graphics, a system for describing and building graphs
+
 ####3.2: First Steps
 Creating a ggplot
 
@@ -72,6 +74,7 @@ ggplot(data = mpg) +
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+
 - ggplot() creates a coordinated system for you to add layers to.
 - geompoint() adds the layer of points or the scatter plot
 A graphing template
@@ -85,6 +88,7 @@ ggplot(data = mpg)
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+
 - When you run ggplot(data=mpg), you get a blank graph.
 2. How many rows are in mpg? How many columns?
 
@@ -108,6 +112,7 @@ mpg
 ## 10 audi         a4 q…   2    2008     4 manu… 4        20    28 p     comp…
 ## # … with 224 more rows
 ```
+
 - 234 rows, 11 columns
 3. What does the drv variable describe? Read the help for ?mpg to find out.
 
@@ -123,6 +128,7 @@ ggplot(data = mpg) +
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+
 5. What happens if you make a scatterplot of class vs drv? Why is the plot not useful?
 
 ```r
@@ -131,7 +137,9 @@ ggplot(data = mpg) +
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+
 - There is no numerical data, so we are unable to find a trend or add a numerical analysis to this data.
+
 ####3.3: Aesthetic Mapping
 - you can add a third variable, like class, to a 2 variable plot by mapping it to an aesthetic 
 - an aesthetic is a visual property of the object in your plot (shape, color, size)
@@ -142,6 +150,7 @@ ggplot(data = mpg) +
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+
 - this is an example of mapping color to class; to map an aesthetic to a variable, associate the name of the aesthetic to the name of the variable in aes().
 - Mapping size to class:
 
@@ -155,6 +164,7 @@ ggplot(data = mpg) +
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
+
 - Mapping aesthetic alpha to class:
 
 ```r
@@ -167,6 +177,7 @@ ggplot(data = mpg) +
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
+
 - Mapping shape to class:
 
 ```r
@@ -185,6 +196,7 @@ ggplot(data = mpg) +
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
+
 - You can also set the aesthetics of your geom manually
 
 ```r
@@ -193,6 +205,7 @@ ggplot(data = mpg) +
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
+
 - How to use aes() to set aesthetics
   - for color: name of color as a character string
   - for size: size of a point in mm
@@ -216,6 +229,7 @@ ggplot(data = mpg) +
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
+
 - Size
 
 ```r
@@ -224,6 +238,7 @@ ggplot(data = mpg) +
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+
 - For continuous variables, a gradient is established for size and color, rather than the random unique colors/sizes associted with categorical variables. Continuous variables can't be mapped to shape.
 4. What happens if you map the same variable to multiple aesthetics?
 
@@ -233,6 +248,7 @@ ggplot(data = mpg) +
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
+
 - It appears to map both aesthetics with both aesthetics behaving how they normally would.
 5. What does the stroke aesthetic do? What shapes does it work with? (Hint: use ?geom_point)
 
@@ -246,6 +262,7 @@ ggplot(data = mpg) +
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
+
 - Strike changes the size of the border around the point. 
 6. What happens if you map an aesthetic to something other than a variable name, like aes(colour = displ < 5)? Note, you’ll also need to specify x and y.
 
@@ -255,10 +272,13 @@ ggplot(data = mpg) +
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
+
 - It assigns the aesthetic to a logical statement. True is one color, while false is another.
+
 ####3.4: Common Problems
 - the + sign has to come at the end of the first line, not the end of the second
 - also carefully read the error message for hints on how to fix your code
+
 ####3.5: Facets
 - another way to add additional variables to your plot, specifically categorical is facets
 - facets split your data into multiple subplots that displays subsets of the data
@@ -271,6 +291,7 @@ ggplot(data = mpg) +
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
+
 How to facet your plot on the combination of 2 variables (use of facet_grid)
 
 ```r
@@ -280,6 +301,7 @@ ggplot(data = mpg) +
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-20-1.png)<!-- -->
+
 Exercises (Assigned Problem set #3)
 1. What happens if you facet on a continuous variable?
 
@@ -290,6 +312,7 @@ ggplot(data = mpg) +
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
+
 - the subsets of the data that make up the subplots correlate to incremental changes in the continuous variable that the data set is faceted on.
 2. What do the empty cells in plot with facet_grid(drv ~ cyl) mean? How do they relate to this plot?
 
@@ -300,7 +323,8 @@ ggplot(data = mpg) +
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-22-1.png)<!-- -->
-2. What plots does the following code make? What does . do?
+
+3. What plots does the following code make? What does . do?
 
 ```r
 ggplot(data = mpg) + 
@@ -317,6 +341,7 @@ ggplot(data = mpg) +
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
+
 - Essentially, you are faceting on a single variable, but instead of the format yielded by facet_wrap(), you are able to maintain the columns/rows yield by facet_grid(). The . is used as a placeholder. When it is placed first (.~category), the function yields no rows and columns based on the category. When it is placed second (cateorgy~.), the function yields rows based on the catgeory and no columns.
 
 4. What are the advantages to using faceting instead of the colour aesthetic? What are the disadvantages? How might the balance change if you had a larger dataset? 
@@ -328,6 +353,7 @@ ggplot(data = mpg) +
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
+
 - The advatages of faceting the data rather than using the color aesthetic is that the header clearly states the subset, as compared to looking at a key to see what subset is assigned to the color of the point. Faceting is also great for understanding trends within a subset. The disadvantages are that the color aesthetic allows you to compare different subsets side by side, while faceting splits up your data. The color aesthetic is also more interesting to look at then the faceted plots.
 5. Read ?facet_wrap. What does nrow do? What does ncol do? What other options control the layout of the individual panels? Why doesn’t facet_grid() have nrow and ncol arguments?
 
@@ -337,6 +363,7 @@ ggplot(data = mpg) +
 - nrow and ncol set the number of rows and columns in the data set. scales and shrink also affect layout of the individual panels. facet_grid() dont have nrow and ncolum arguments because the number of rows/columns is determined by the variable(s) used in the facet_grid() function.
 6. When using facet_grid() you should usually put the variable with more unique levels in the columns. Why?
 - Truthfully, I have no idea. I'm assuming because it's more aesthetically pleasing or easy to read. 
+
 ####3.6: Geometric objects
 - the geom function you use can change the shape/presentation of the data
 - How to use geom_smooth() function
@@ -351,6 +378,7 @@ ggplot(data = mpg) +
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-27-1.png)<!-- -->
+
 - However, not every aesthetic works with every geom. You can't change the shape of the line, but you can change the type of line
 
 ```r
@@ -363,6 +391,7 @@ ggplot(data = mpg) +
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-28-1.png)<!-- -->
+
 Group aesthetics 
 
 ```r
@@ -378,6 +407,7 @@ ggplot(data = mpg) +
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-29-1.png)<!-- -->
+
 How to display multiple geoms
 
 ```r
@@ -391,6 +421,7 @@ ggplot(data = mpg) +
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-30-1.png)<!-- -->
+
 - This code yields the same plot as above while allowing you to add aesthetics and adjust the geoms:
 ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
   geom_point() + 
@@ -408,6 +439,7 @@ ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-31-1.png)<!-- -->
+
 Exercises (Assigned Problem Set #4)
 1. What geom would you use to draw a line chart? A boxplot? A histogram? An area chart?
 - Line: geom_line, geom_smooth
@@ -427,6 +459,7 @@ ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = drv)) +
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-32-1.png)<!-- -->
+
 - I expected the plot to look like this, but I was unsure if the se = FALSE would effect the final outcome. I don't think it did?
 3. What does show.legend = FALSE do? What happens if you remove it? Why do you think I used it earlier in the chapter?
 - It affects whether or not aspects of the legend are shown.
@@ -453,6 +486,8 @@ ggplot(data = mpg, mapping = aes(x = displ, y = hwy) ) +
 ```
 
 ![](Week_2_files/figure-html/unnamed-chunk-33-1.png)<!-- -->
+
+
 ####3.10 The layered grammar of graphics 
 - This basic format can be used to make any plot I can imagine
 ggplot(data = <DATA>) + 
