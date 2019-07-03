@@ -16,8 +16,13 @@ output:
 
 ###1:Basic Building Blocks 
 - R can be used as an interactive calculator 
-```{r}
+
+```r
 2 + 3
+```
+
+```
+## [1] 5
 ```
 - how to assign a variable: x<- 5+7
 - to view the contents of your variable, just type x and hit enter
