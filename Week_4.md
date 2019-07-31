@@ -361,7 +361,7 @@ ggplot(data = mpg) +
 
 ![](Week_4_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
 
-IDK  
+I don't know what the difference is. I think my plot is wrong.
 
 5. Compare and contrast geom_violin() with a facetted geom_histogram(), or a coloured geom_freqpoly(). What are the pros and cons of each method?  
 - geom_violin()
