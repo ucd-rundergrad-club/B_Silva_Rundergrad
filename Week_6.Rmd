@@ -1,0 +1,260 @@
+---
+title: "Week_6"
+author: "Brennan"
+date: "8/18/2019"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+### Chapter 12: Tidy Data
+
+#### 12.1: Prerequisities 
+```{r}
+library(tidyverse)
+```
+
+#### 12.2: Tidy data
+- There are the rules which make a dataset tidy:  
+    - Each variable must have its own column  
+    - Each observation must have its own row  
+    - Each value must have its own cell  
+- These rules lead to a simpler set of instructions: put each dataset in a tibble and put each variable in a column  
+- ensuring your data is tidy is advatageous because it ensures you have one consistent way of storing data and tidy data works good with mutate and summary functions  
+Exercises  
+2. Compute the rate for table2, and table4a + table4b. You will need to perform four operations:  
+    1. Extract the number of TB cases per country per year.  
+    2. Extract the matching population per country per year.  
+    3. Divide cases by population, and multiply by 10000.  
+    4. Store back in the appropriate place.  
+```{r}
+table2.1 <- filter(table2, type == "cases")
+```
+```{r}
+table2.1 
+```
+```{r}
+table2.2 <- filter(table2, type == "population")
+``` 
+```{r}
+table2.3 <- table2.1$count / table2.2$count *10000
+```
+```{r}
+table2.3 <- c( 0.372741, 0.372741, 1.294466, 1.294466, 2.193930, 2.193930, 4.612363, 4.612363, 1.667495, 1.667495, 1.669488, 1.669488) 
+```
+```{r}
+table2 %>%
+  mutate(rate = table2.3)
+```
+Which representation is easiest to work with? Which is hardest? Why?  
+- Without attempting to do 4a+4b I am going to say it is the hardest style to work with. The reason being is that I'd have to do double the work I did for table2, but I would have no way to store it in a way that is appropriate. Because it doesn't fit within the framework of either of the graphs. I'd have to make a new dataset which just seems like too much effort.  
+3. Recreate the plot showing change in cases over time using table2 instead of table1. What do you need to do first?  
+```{r}
+library(ggplot2)
+ggplot(table2.1, aes(year, count)) + 
+  geom_line(aes(group = country), colour = "grey50") + 
+  geom_point(aes(colour = country))
+```
+
+- What you have to do is filter out the types that are not cases, so you are left with the count values that are the case numbers.
+
+#### 12.3: Spreading and Gathering
+Gathering  
+- gathering helps solve the problem of the column names that are not names of variables, but values of a variable
+- the name of the variable whose values form the column names is the key.  
+- the name of the variable whose values are spread over the cells is the value
+```{r}
+table4a %>% 
+  gather(`1999`, `2000`, key = "year", value = "cases")
+```
+```{r}
+table4b %>% 
+  gather(`1999`, `2000`, key = "year", value = "population")
+```
+- left_join() can combine the tidied version of two tables into a single tibble
+```{r}
+tidy4a <- table4a %>% 
+  gather(`1999`, `2000`, key = "year", value = "cases")
+tidy4b <- table4b %>% 
+  gather(`1999`, `2000`, key = "year", value = "population")
+left_join(tidy4a, tidy4b)
+```
+Spreading    
+- spreading is the opposite of gathering: you use it when an observation is scattered across multiple rows  
+- the column that contains variable names is the key  
+- the column that contains values from multiple variables is the value
+```{r}
+table2 %>%
+    spread(key = type, value = count)
+```
+Exercises  
+1. Why are gather() and spread() not perfectly symmetrical?  
+```{r}
+stocks <- tibble(
+  year   = c(2015, 2015, 2016, 2016),
+  half  = c(   1,    2,     1,    2),
+  return = c(1.88, 0.59, 0.92, 0.17)
+)
+```
+```{r}
+?gather
+```
+- I do not know how to answer in terms of symmetry. it's clear that gather and spread do the opposite functions in this example. Convert changes the columns automatically to their type. While cases is a character value, when it is gathered it becomes an integer column.
+2.  Why does this code fail?
+```{r}
+table4a %>% 
+  gather('1999', '2000', key = "year", value = "cases")
+```
+- 1999 and 2000 weren't suround by ''. 
+3. Why does spreading this tibble fail? How could you add a new column to fix the problem?
+```{r}
+people <- tribble(
+  ~name,             ~key,    ~value,
+  #-----------------|--------|------
+  "Phillip Woods",   "age",       45,
+  "Phillip Woods",   "height",   186,
+  "Phillip Woods",   "age",       50,
+  "Jessica Cordero", "age",       37,
+  "Jessica Cordero", "height",   156
+)
+```
+people %>%  
+    spread(key = key, value = value)  
+```{r}
+?rowid_to_column
+```
+- Spreading this tibble fails because Phillip Woods has an extra age than Jessica Cordero. You could rowid_to_column. 
+4. Tidy the simple tibble below. Do you need to spread or gather it? What are the variables?  
+```{r}
+preg <- tribble(
+  ~pregnant, ~male, ~female,
+  "yes",     NA,    10,
+  "no",      20,    12
+)
+```
+```{r}
+preg 
+```
+```{r}
+preg2 <- preg %>% 
+  gather(`female`, `male`, key = "gender", value = "count")
+```
+```{r}
+preg2 
+```
+```{r}
+preg3 <- preg2 %>% 
+  spread(key = "pregnant", value = "count")
+```
+```{r}
+names(preg3) <- c("gender", "pregnant", "not_pregnant")
+```
+```{r}
+preg3
+```
+- I spread and gathered the data and then renamed the columns in order for them to make sense. 
+
+#### 12.4: Separating and Uniting 
+- separate(): pulls apart one column into multiple columns, by splitting wherever a separator character appears  
+```{r}
+table3 %>% 
+  separate(rate, into = c("cases", "population"))
+```
+- if you wish to have the separate function cut at a specific character you can use the sep function: sep = "/"  
+- use the argument convert = TRUE, to ensure that it converts from characters to integers, etc.  
+Unite  
+- combines multiple columns into a single column 
+```{r}
+table5 %>% 
+  unite(new, century, year)
+```
+```{r}
+table5 %>% 
+  unite(new, century, year, sep = "")
+```
+Exercises  
+1. What do the extra and fill arguments do in separate()? Experiment with the various options for the following two toy datasets. 
+```{r}
+?separate
+```
+```{r}
+tibble(x = c("a,b,c", "d,e,f,g", "h,i,j")) %>% 
+  separate(x, c("one", "two", "three"), extra = "merge")
+```
+```{r}
+tibble(x = c("a,b,c", "d,e", "f,g,i")) %>% 
+  separate(x, c("one", "two", "three"), fill = "right")
+```
+- Extra controls what happens when there are too many pieces, while fill deals with when there arent enough pieces. 
+2. Both unite() and separate() have a remove argument. What does it do? Why would you set it to FALSE?  
+- The remove argument removes the input colum from the output dataframe. If you wanted to show where your two columns a=originated from you could set remove argument to false. 
+3. Compare and contrast separate() and extract(). Why are there three variations of separation (by position, by separator, and with groups), but only one unite?  
+```{r}
+?extract
+```
+- To be honest, I'd how to work extract(), it seems very complicated wherease separate has a simpler syntax. There are many ways to break something into pieces, but as far as uniting goes, you can only make one whole. 
+
+#### 12.5 Missing Values   
+-  two types of missing values  
+    - Explicitly (marked with NA)  
+    - Implicitly (simply not present in the data set)
+- making explicit missing values implicit: gather (,, na.rm = TRUE)
+- complete() can make implicit missing values explicit  
+- complete() takes a set of columns, and finds all unique combinations. It then ensures the original dataset contains all those values, filling in explicit NAs where necessary  
+- sometimes missing values indicate that the previous value should be carried forward. Fill() fills these missing values  
+```{r}
+treatment <- tribble(
+  ~ person,           ~ treatment, ~response,
+  "Derrick Whitmore", 1,           7,
+  NA,                 2,           10,
+  NA,                 3,           9,
+  "Katherine Burke",  1,           4
+)
+```
+```{r}
+treatment %>% 
+  fill(person)
+```
+
+#### 12.6: Case Study  
+Exercises  
+3. I claimed that iso2 and iso3 were redundant with country. Confirm this claim.
+```{r}
+who1 <- who %>% 
+  gather(new_sp_m014:newrel_f65, key = "key", value = "cases", na.rm = TRUE)
+who1
+```
+```{r}
+select(who, country, iso2, iso3)
+```
+- Confirmed?
+4. For each country, year, and sex compute the total number of cases of TB. Make an informative visualisation of the data.
+```{r}
+who2<- who %>%
+  gather(new_sp_m014:newrel_f65, key = "key", value = "cases", na.rm = TRUE) %>% 
+  mutate(key = stringr::str_replace(key, "newrel", "new_rel")) %>%
+  separate(key, c("new", "var", "sexage")) %>% 
+  select(-new, -iso2, -iso3) %>% 
+  separate(sexage, c("sex", "age"), sep = 1)
+```
+```{r}
+who2
+```
+```{r}
+ggplot(data = who2)+
+  geom_point(mapping = aes(year, cases, color = country), show.legend = FALSE )+
+  facet_wrap(~sex)
+```
+
+- I honestly don't know how to total up by country and year. I think I might be able to do it by gender, but the way I am thinking seems to drawn out and complicated. Please Help!
+
+Maloof tutorial   
+Joining Data sets    
+- inner_join() only keeps lines where the key is present in both data sets   
+- left_join() keeps all rows from the left data set and only those from the right that have the key that matches the left  
+      - analogous with right_join()
+- full_join() keeps all rows from the left or right regardless of whether or not there is a matching key
+Specifying keys    
+- If the key columns have different names in the two data sets, You can specify the equivalency by using the argument by=c("name"="givenName"))   
+
+
